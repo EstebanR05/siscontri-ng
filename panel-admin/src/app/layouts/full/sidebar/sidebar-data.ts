@@ -11,66 +11,98 @@ export const navItems: NavItem[] = [
     route: '/dashboard',
   },
   {
-    navCap: 'Ui Components',
+    navCap: 'Comprobantes',
   },
   {
-    displayName: 'Badge',
-    iconName: 'rosette',
-    bgcolor: 'accent',
-    route: '/ui-components/badge',
-  },
-  {
-    displayName: 'Chips',
-    iconName: 'poker-chip',
-    bgcolor: 'warning',
-    route: '/ui-components/chips',
-  },
-  {
-    displayName: 'Lists',
-    iconName: 'list',
-    bgcolor: 'success',
-    route: '/ui-components/lists',
-  },
-  {
-    displayName: 'Menu',
-    iconName: 'layout-navbar-expand',
-    bgcolor: 'error',
-    route: '/ui-components/menu',
-  },
-  {
-    displayName: 'Tooltips',
-    iconName: 'tooltip',
+    displayName: 'Contables',
+    iconName: 'file-invoice',
     bgcolor: 'primary',
-    route: '/ui-components/tooltips',
+    route: '',
   },
   {
-    navCap: 'Auth',
+    displayName: 'Tesoreria',
+    iconName: 'currency-dollar',
+    bgcolor: 'primary',
+    route: '',
   },
   {
-    displayName: 'Login',
-    iconName: 'lock',
+    displayName: 'Comerciales',
+    iconName: 'cloud-dollar',
+    bgcolor: 'primary',
+    route: '',
+  },
+  {
+    displayName: 'Automatización',
+    iconName: 'refresh',
+    bgcolor: 'primary',
+    route: '',
+  },
+  {
+    navCap: 'Configuraciones',
+  },
+  {
+    displayName: 'Cuentas Contables',
+    iconName: 'table-options',
+    bgcolor: 'primary',
+    route: '',
+  },
+  {
+    displayName: 'Parametros',
+    iconName: 'settings',
+    bgcolor: 'primary',
+    route: '',
+  },
+  {
+    displayName: 'Contactos',
+    iconName: 'users',
+    bgcolor: 'primary',
+    route: '',
+  },
+  {
+    navCap: 'Otros',
+  },
+  {
+    displayName: 'Cierre de año',
+    iconName: 'sunset-2',
+    bgcolor: 'primary',
+    route: '',
+  }, {
+    displayName: 'Traslado de cuentas',
+    iconName: 'circuit-cell',
+    bgcolor: 'primary',
+    route: '',
+  },
+  {
+    displayName: 'Reportes',
+    iconName: 'chart-bar',
+    bgcolor: 'primary',
+    children: [
+      {
+        displayName: 'Reportes Comerciales',
+        iconName: 'chart-dots-2',
+        bgcolor: 'primary',
+        route: '',
+      }, {
+        displayName: 'Reporte Contables',
+        iconName: 'chart-histogram',
+        bgcolor: 'primary',
+        route: '',
+      }
+    ]
+  },
+  {
     bgcolor: 'accent',
-    route: '/authentication/login',
   },
-  {
-    displayName: 'Register',
-    iconName: 'user-plus',
-    bgcolor: 'warning',
-    route: '/authentication/register',
-  },
-  {
-    navCap: 'Extra',
-  },
-  {
-    displayName: 'Icons',
-    iconName: 'mood-smile',
-    bgcolor: 'success',
-    route: '/extra/icons',
-  },
-  {
-    displayName: 'Sample Page',
-    iconName: 'aperture',
-    bgcolor: 'error',
-    route: '/extra/sample-page',
-  },
+  // {
+  //   displayName: 'Login',
+  //   iconName: 'lock',
+  //   bgcolor: 'accent',
+  //   route: '/authentication/login',
+  // },
+  // {
+  //   displayName: 'Register',
+  //   iconName: 'user-plus',
+  //   bgcolor: 'warning',
+  //   route: '/authentication/register',
+  // },
 ];

@@ -1,10 +1,9 @@
-import { BreakpointObserver, MediaMatcher } from '@angular/cdk/layout';
+import { BreakpointObserver } from '@angular/cdk/layout';
 import { Component, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
 import { Subscription } from 'rxjs';
-import { MatSidenav, MatSidenavContent } from '@angular/material/sidenav';
-import { NavigationEnd, Router } from '@angular/router';
+import { MatSidenav } from '@angular/material/sidenav';
 import { navItems } from './sidebar/sidebar-data';
-import { NavService } from '../../services/nav.service';
+import { NavService } from '../services/nav.service';
 import { AppNavItemComponent } from './sidebar/nav-item/nav-item.component';
 import { RouterModule } from '@angular/router';
 import { MaterialModule } from 'src/app/material.module';
@@ -63,10 +62,7 @@ export class FullComponent implements OnInit {
     this.layoutChangesSubscription = this.breakpointObserver
       .observe([MOBILE_VIEW, TABLET_VIEW, MONITOR_VIEW])
       .subscribe((state) => {
-        // SidenavOpened must be reset true when layout changes
-
         this.isMobileScreen = state.breakpoints[MOBILE_VIEW];
-
         this.isContentWidthFixed = state.breakpoints[MONITOR_VIEW];
       });
   }
