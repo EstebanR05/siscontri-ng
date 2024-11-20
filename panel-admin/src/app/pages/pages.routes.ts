@@ -4,13 +4,8 @@ import { StarterComponent } from './starter/starter.component';
 export const PagesRoutes: Routes = [
   {
     path: '',
-    component: StarterComponent,
-    data: {
-      title: 'Starter',
-      urls: [
-        { title: 'Dashboard', url: '/dashboard' },
-        { title: 'Starter' },
-      ],
-    },
+    children: [
+      { path: '', component: StarterComponent }
+    ]
   },
 ];
