@@ -26,7 +26,7 @@
                     <form class="m-t-30" [formGroup]="form" (ngSubmit)="submit()">
                       <mat-label class="mat-subtitle-2 f-s-14 f-w-600 m-b-12 d-block">Usuario</mat-label>
                       <mat-form-field appearance="outline" class="w-100" color="primary">
-                        <input matInput formControlName="Ingresa tu nombre de Usuario"/>
+                        <input matInput placeholder="Ingresa tu nombre de Usuario" formControlName="uname" />
                         @if(f['uname'].touched && f['uname'].invalid) {
                         <mat-hint class="m-b-16 error-msg">
                           @if(f['uname'].errors &&
@@ -45,7 +45,7 @@
                       <!-- password -->
                       <mat-label class="mat-subtitle-2 f-s-14 f-w-600 m-b-12 d-block">Contraseña</mat-label>
                       <mat-form-field appearance="outline" class="w-100" color="primary">
-                        <input matInput type="password" formControlName="Ingresa tu Contraseña" />
+                        <input matInput type="password" placeholder="Ingresa tu Contraseña" formControlName="password" />
                         @if(f['password'].touched && f['password'].invalid) {
                         <mat-hint class="m-b-16 error-msg">
                           @if(f['password'].errors &&
@@ -59,7 +59,8 @@
                       <div class="d-block d-lg-flex align-items-center m-b-12">
                         <mat-checkbox color="primary">Recordarme</mat-checkbox>
                         <a [routerLink]="['/']"
-                          class="text-primary f-w-600 text-decoration-none m-l-auto d-block f-s-14">Olvidaste tu contraseña
+                          class="text-primary f-w-600 text-decoration-none m-l-auto d-block f-s-14">Olvidaste tu
+                          contraseña
                           ?</a>
                       </div>
                       <button mat-flat-button color="primary" class="w-100" [disabled]="!form.valid">
