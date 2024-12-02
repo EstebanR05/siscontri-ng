@@ -5,6 +5,8 @@ import { ApplicationInfo } from 'src/app/shared/core/mod-core/models/application
 import { Login } from 'src/app/shared/core/mod-core/models/login.model';
 import { User } from 'src/app/shared/core/mod-core/models/user.model';
 import { BaseComponent } from '../core/base.component';
+import { Observable, throwError } from 'rxjs';
+import { catchError, map, tap } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
@@ -16,24 +18,53 @@ export class AuthUserService extends BaseComponent {
     private router: Router
   ) { super() }
 
-  public async validAccessToken(login: Login): Promise<void> {
+  public validAccessToken(login: Login): Observable<void> {
     const params = new URLSearchParams();
     params.append('username', login.username);
     params.append('password', login.password);
     params.append('grant_type', 'password');
     params.append('client_id', 'siscontri');
 
-    console.log("before response");
-    const headers = new HttpHeaders({ 'Content-type': 'application/x-www-form-urlencoded; charset=utf-8', Authorization: 'Basic ' + btoa('siscontri:password') });
-    const responseAuth = await this.http.post(`${this.apiUrl}/oauth/token`, params.toString(), { headers }).toPromise();
-    console.log("after response");
+    const headers = new HttpHeaders({
+      'Content-type': 'application/x-www-form-urlencoded; charset=utf-8',
+      Authorization: 'Basic ' + btoa('siscontri:password')
+    });
 
-    this.saveToken(responseAuth, login.username);
-    await this.router.navigate(['/dashboard']);
+    return this.http.post<any>(`${this.apiUrl}oauth/token`, params.toString(), { headers }).pipe(
+      tap((response) => this.saveToken(response, login.username)),
+      tap(() => this.router.navigate(['/dashboard'])),
+      catchError((error) => {
+        console.error('Error en validAccessToken:', error);
+        return throwError(() => new Error('Error en autenticación'));
+      })
+    );
+  }
+
+  public getCurrentUser(): Observable<User> {
+    const username = localStorage.getItem('username');
+    if (!username) {
+      return throwError(() => new Error('No hay credenciales almacenadas.'));
+    }
+
+    const url = `secu/api/v1/search/users/${username}`;
+    return this.http.get<User>(url).pipe(
+      tap((user) => localStorage.setItem('user_info', JSON.stringify(user))),
+      catchError((error) => {
+        console.error('Error obteniendo el usuario:', error);
+        return throwError(() => new Error('Error obteniendo la información del usuario'));
+      })
+    );
+  }
+
+  private saveToken(token: any, username: string): void {
+    this.clearStorage();
+    localStorage.setItem('access_token', token.access_token);
+    localStorage.setItem('username', username);
+    localStorage.setItem('expires_in', token.expires_in);
   }
 
   public checkCredentials(): boolean {
-    if (!localStorage.getItem('access_token')) {
+    if (!this.token) {
       this.router.navigate(['/login']);
     }
 
@@ -42,7 +73,7 @@ export class AuthUserService extends BaseComponent {
 
   public getAccessToken(): string {
     if (this.checkCredentials()) {
-      return localStorage.getItem('access_token') || "";
+      return this.token;
     }
 
     throw new Error('no se encontro el token de acceso');
@@ -56,20 +87,6 @@ export class AuthUserService extends BaseComponent {
     throw new Error('no se encontro informacion del usuario');
   }
 
-  public async getCurrentUser(): Promise<User> {
-    if (localStorage.getItem('user_info')) {
-      return JSON.parse(localStorage.getItem('user_info') || "");
-    }
-
-    if (this.checkCredentials()) {
-      const url = `secu/api/v1/search/users/${localStorage.getItem('username')}`;
-      const user: User = await this.http.get<User>(url).toPromise() || new User();
-      localStorage.setItem('user_info', JSON.stringify(user));
-      return user;
-    }
-
-    throw new Error('No hay credenciales para acceder a la API');
-  }
 
   public getApplicationInfo(): Promise<any> {
     const url = `secu/api/v1/search/applicationInfo`;
@@ -86,12 +103,5 @@ export class AuthUserService extends BaseComponent {
     localStorage.removeItem('username');
     localStorage.removeItem('expires_in');
     localStorage.removeItem('user_info');
-  }
-
-  private saveToken(token: any, username: string): void {
-    console.log("save token");
-    localStorage.setItem('access_token', token.access_token);
-    localStorage.setItem('username', username);
-    localStorage.setItem('expires_in', token.expires_in);
   }
 }

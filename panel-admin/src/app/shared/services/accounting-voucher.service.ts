@@ -1,6 +1,6 @@
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { SERVER_URL } from 'src/environments/environment';
+import { SERVER_URL } from 'environments/environment';
 import { AuthUserService } from 'src/app/shared/services/auth-user.service';
 import { AccountVoucherDetail } from 'src/app/shared/core/mod-core/models/account-voucher-detail.model';
 import { AccountVoucher, AccountVoucherFilter } from 'src/app/shared/core/mod-core/models/account-voucher.model';
@@ -8,38 +8,39 @@ import { ReportsFilter } from 'src/app/shared/core/mod-core/models/reports-filte
 import { TransactionFilter } from 'src/app/shared/core/mod-core/models/transaction-filter.model';
 import { Transaction } from 'src/app/shared/core/mod-core/models/transaction.model';
 import { payrollSetup } from '../core/mod-core/models/prmt-payroll-setup.model';
+import { BaseComponent } from '../core/base.component';
+import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
-export class AccountingVoucherService {
+export class AccountingVoucherService extends BaseComponent {
 
   constructor(
     private http: HttpClient,
     private userService: AuthUserService
-  ) {
-  }
+  ) { super() }
 
-  public getAccountingVouchers(filters: AccountVoucherFilter, page: number, size: number): Promise<any> {
-    const url = `acco/api/v1/search/accountingVouchers`;
+  public getAccountingVouchers(filters: AccountVoucherFilter, page: number, size: number): Observable<any> {
+    const url = `${this.apiUrl}acco/api/v1/search/accountingVouchers`;
     const headers = new HttpHeaders().set('Authorization', `Bearer ${this.userService.getAccessToken()}`);
-    let params = this.bindingParams(filters, page, size);
-    return this.http.get<any>(url, { headers, params }).toPromise();
+    const params = this.bindingParams(filters, page, size);
+    return this.http.get<any>(url, { headers, params });
   }
 
-  getAccountingVoucher(voucherId: number): Promise<AccountVoucher> {
+  getAccountingVoucher(voucherId: number): Promise<any> {
     const url = `acco/api/v1/search/accountingVouchers/${voucherId}`;
     const headers = new HttpHeaders().set('Authorization', `Bearer ${this.userService.getAccessToken()}`);
     return this.http.get<AccountVoucher>(url, { headers }).toPromise();
   }
 
-  getAccountingVoucherDetails(voucherId: number): Promise<AccountVoucherDetail[]> {
+  getAccountingVoucherDetails(voucherId: number): Promise<any> {
     const url = `acco/api/v1/search/accountingVouchers/${voucherId}/details`;
     const headers = new HttpHeaders().set('Authorization', `Bearer ${this.userService.getAccessToken()}`);
     return this.http.get<AccountVoucherDetail[]>(url, { headers }).toPromise();
   }
 
-  getTransactions(documentId: number, branchOfficesId: number, elaborationDateRange: Date[], noDoc: string): Promise<Transaction[]> {
+  getTransactions(documentId: number, branchOfficesId: number, elaborationDateRange: Date[], noDoc: string): Promise<any> {
     const url = `acco/api/v1/search/transactions`;
     const headers = new HttpHeaders()
       .set('Authorization', `Bearer ${this.userService.getAccessToken()}`);
@@ -66,7 +67,7 @@ export class AccountingVoucherService {
     return this.http.get<Transaction[]>(url, { headers, params }).toPromise();
   }
 
-  getPayroll(documentId: number, branchOfficesId: number, elaborationDateRange: Date[], periodo: string): Promise<payrollSetup[]> {
+  getPayroll(documentId: number, branchOfficesId: number, elaborationDateRange: Date[], periodo: string): Promise<any> {
     const url = `acco/api/v1/search/payroll`;
     const headers = new HttpHeaders().set('Authorization', `Bearer ${this.userService.getAccessToken()}`);
     let params = new HttpParams();
@@ -92,19 +93,19 @@ export class AccountingVoucherService {
     return this.http.get<payrollSetup[]>(url, { headers, params }).toPromise();
   }
 
-  getConscutive(documentId: number): Promise<number> {
+  getConscutive(documentId: number): Promise<any> {
     const url = `acco/api/v1/search/accountingVouchers/documents/${documentId}/consecutive`;
     const headers = new HttpHeaders().set('Authorization', `Bearer ${this.userService.getAccessToken()}`);
     return this.http.get<number>(url, { headers }).toPromise();
   }
 
-  getConscutiveList(documentId: number): Promise<number> {
+  getConscutiveList(documentId: number): Promise<any> {
     const url = `acco/api/v1/search/accountingVouchers/documents/${documentId}/consecutiveList`;
     const headers = new HttpHeaders().set('Authorization', `Bearer ${this.userService.getAccessToken()}`);
     return this.http.get<number>(url, { headers }).toPromise();
   }
 
-  createAccountingVoucher(accountVoucher: AccountVoucher): Promise<number> {
+  createAccountingVoucher(accountVoucher: AccountVoucher): Promise<any> {
     const url = `acco/api/v1/accountingVouchers`;
     const headers = new HttpHeaders()
       .set('Authorization', `Bearer ${this.userService.getAccessToken()}`);
@@ -112,7 +113,7 @@ export class AccountingVoucherService {
     return this.http.post<number>(url, accountVoucher, { headers }).toPromise();
   }
 
-  duplicateAccountingVoucher(accountVoucherId: number): Promise<number> {
+  duplicateAccountingVoucher(accountVoucherId: number): Promise<any> {
     const url = `acco/api/v1/accountingVouchers/${accountVoucherId}/duplicate`;
     const headers = new HttpHeaders()
       .set('Authorization', `Bearer ${this.userService.getAccessToken()}`);
@@ -120,7 +121,7 @@ export class AccountingVoucherService {
     return this.http.post<number>(url, null, { headers }).toPromise();
   }
 
-  updateAccountingVoucher(accountVoucher: AccountVoucher, isSave: boolean): Promise<number> {
+  updateAccountingVoucher(accountVoucher: AccountVoucher, isSave: boolean): Promise<any> {
     const url = `acco/api/v1/accountingVouchers/${accountVoucher.id}/${isSave}`;
     const headers = new HttpHeaders().set('Authorization', `Bearer ${this.userService.getAccessToken()}`);
     return this.http.put<number>(url, accountVoucher, { headers }).toPromise();
@@ -151,7 +152,7 @@ export class AccountingVoucherService {
     return this.http.get<any>(url, { headers, params }).toPromise();
   }
 
-  updateTransationAndDelete(accountVoucherId: number, accountVoucher: AccountVoucher): Promise<number> {
+  updateTransationAndDelete(accountVoucherId: number, accountVoucher: AccountVoucher): Promise<any> {
     const url = `acco/api/v1/accountingVouchers/${accountVoucherId}/updateTransationAndDelete`;
     const headers = new HttpHeaders().set('Authorization', `Bearer ${this.userService.getAccessToken()}`);
     return this.http.put<number>(url, accountVoucher, { headers }).toPromise();
@@ -165,7 +166,7 @@ export class AccountingVoucherService {
     return this.http.put<void>(url, null, { headers }).toPromise();
   }
 
-  unautorizedAccountingVoucher(accountVoucherId: number): Promise<any[]> {
+  unautorizedAccountingVoucher(accountVoucherId: number): Promise<any> {
     const url = `acco/api/v1/accountingVouchers/${accountVoucherId}/unauthorize`;
     const headers = new HttpHeaders().set('Authorization', `Bearer ${this.userService.getAccessToken()}`);
     return this.http.put<any[]>(url, null, { headers }).toPromise();
@@ -177,13 +178,13 @@ export class AccountingVoucherService {
     return this.http.delete(url, { headers }).toPromise();
   }
 
-  processTransactions(transactionFilter: TransactionFilter): Promise<any[]> {
+  processTransactions(transactionFilter: TransactionFilter): Promise<any> {
     const url = `acco/api/v1/accountingVouchers/processTransactions`;
     const headers = new HttpHeaders().set('Authorization', `Bearer ${this.userService.getAccessToken()}`);
     return this.http.post<any[]>(url, transactionFilter, { headers }).toPromise();
   }
 
-  processPayroll(filter: payrollSetup): Promise<any[]> {
+  processPayroll(filter: payrollSetup): Promise<any> {
     const url = `acco/api/v1/accountingVouchers/processPayroll`;
     const headers = new HttpHeaders().set('Authorization', `Bearer ${this.userService.getAccessToken()}`);
     return this.http.post<any[]>(url, filter, { headers }).toPromise();
@@ -308,13 +309,13 @@ export class AccountingVoucherService {
     let params = this.bindPaginator(0, 0);
 
     if (reportsFilter.accountAccountingStart) {
-      params = params.append('documentCodeStart', reportsFilter.accountAccountingStart.code.toString());
-      params = params.append('acacIdStart', reportsFilter.accountAccountingStart.id.toString());
+      params = params.append('documentCodeStart', reportsFilter.accountAccountingStart.code || '');
+      params = params.append('acacIdStart', reportsFilter.accountAccountingStart.id || '');
     }
 
     if (reportsFilter.accountAccountingEnd) {
-      params = params.append('documentCodeEnd', reportsFilter.accountAccountingEnd.code.toString());
-      params = params.append('acacIdEnd', reportsFilter.accountAccountingEnd.id.toString());
+      params = params.append('documentCodeEnd', reportsFilter.accountAccountingEnd.code || '');
+      params = params.append('acacIdEnd', reportsFilter.accountAccountingEnd.id || '');
     }
 
     if (reportsFilter.elaborationDate) {
@@ -338,18 +339,18 @@ export class AccountingVoucherService {
     }
 
     if (reportsFilter.branchOffices) {
-      params = params.append('branchOfficesId', reportsFilter.branchOffices.id.toString());
+      params = params.append('branchOfficesId', reportsFilter.branchOffices.id || '');
     }
 
     if (reportsFilter.costCenters) {
-      params = params.append('costCenterId', reportsFilter.costCenters.id.toString());
+      params = params.append('costCenterId', reportsFilter.costCenters.id || '');
     }
 
     if (reportsFilter.format) {
-      params = params.append('formatId', reportsFilter.format.id.toString());
+      params = params.append('formatId', reportsFilter.format.id || '');
     }
 
-    params = params.append('businessId', reportsFilter.businessId.toString());
+    params = params.append('businessId', reportsFilter.businessId || '');
 
     return params;
   }
@@ -358,19 +359,19 @@ export class AccountingVoucherService {
     let url: string = `${SERVER_URL}${api}&`;
 
     if (filters.document) {
-      url += `documentId=${filters.document.id.toString()}&`;
+      url += `documentId=${filters.document.id?.toString()}&`;
     }
 
     if (filters.contact) {
-      url += `contactsId=${filters.contact.id.toString()}&`;
+      url += `contactsId=${filters.contact.id?.toString()}&`;
     }
 
     if (filters.branchOffices) {
-      url += `businessLocationsId=${filters.branchOffices.id.toString()}&`;
+      url += `businessLocationsId=${filters.branchOffices.id?.toString()}&`;
     }
 
     if (filters.state) {
-      url += `stateId=${filters.state.id.toString()}&`;
+      url += `stateId=${filters.state.id?.toString()}&`;
     }
 
     if (filters.noDoc) {
@@ -398,19 +399,19 @@ export class AccountingVoucherService {
     let params: HttpParams = this.bindPaginator(page, size);
 
     if (filters.document) {
-      params = params.append('documentId', filters.document.id.toString());
+      params = params.append('documentId', filters.document.id || '');
     }
 
     if (filters.contact) {
-      params = params.append('contactsId', filters.contact.id.toString());
+      params = params.append('contactsId', filters.contact.id || '');
     }
 
     if (filters.branchOffices) {
-      params = params.append('businessLocationsId', filters.branchOffices.id.toString());
+      params = params.append('businessLocationsId', filters.branchOffices.id || '');
     }
 
     if (filters.state) {
-      params = params.append('stateId', filters.state.id.toString());
+      params = params.append('stateId', filters.state.id || '');
     }
 
     if (filters.noDoc) {

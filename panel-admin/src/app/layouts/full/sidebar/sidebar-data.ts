@@ -17,7 +17,7 @@ export const navItems: NavItem[] = [
     displayName: 'Contables',
     iconName: 'file-invoice',
     bgcolor: 'primary',
-    route: '',
+    route: '/Accounting/Accountant',
   },
   {
     displayName: 'Tesoreria',

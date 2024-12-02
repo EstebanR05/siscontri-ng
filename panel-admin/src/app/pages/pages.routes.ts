@@ -5,7 +5,8 @@ export const PagesRoutes: Routes = [
   {
     path: '',
     children: [
-      { path: '', component: StarterComponent }
+      { path: 'dashboard', component: StarterComponent },
+      { path: 'Accounting', loadChildren: () => import('./accounting/accounting.routing').then((m) => m.accountingRoutes) },
     ]
   },
 ];

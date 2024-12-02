@@ -2,10 +2,10 @@
 export const environment = {
   production: false,
   app: {
-    apiBaseUrl: 'http://localhost:8080',
+    apiBaseUrl: 'http://localhost:8080/',
   },
   auth: {
-    JWT: localStorage.getItem('token'),
+    JWT: localStorage.getItem('access_token'),
     userId: localStorage.getItem('userId')
   },
 };

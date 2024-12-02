@@ -48,14 +48,19 @@ export class AppSideLoginComponent extends BaseComponent implements OnInit {
     return this.form.controls;
   }
 
-  async submit(): Promise<void> {
-    try {
-      let login: Login = { username: this.form.value.uname, password: this.form.value.password };
-      await this.userService.validAccessToken(login);
-    } catch (e: any) {
-      if (e.status === 401 || e.status === 400) {
-        this.handleError('Usuario y/o contraseña es incorrecta.')
-      }
+  submit(): void {
+    if (this.form.invalid) {
+      return;
     }
+
+    const login: Login = {
+      username: this.form.value.uname!,
+      password: this.form.value.password!
+    };
+
+    this.userService.validAccessToken(login).subscribe({
+      next: () => console.log('Autenticación exitosa'),
+      error: (err) => console.error('Error:', err)
+    });
   }
 }

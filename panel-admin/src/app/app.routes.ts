@@ -12,7 +12,7 @@ export const routes: Routes = [
     path: '',
     component: FullComponent,
     children: [
-      { path: 'dashboard', loadChildren: () => import('./pages/pages.routes').then((m) => m.PagesRoutes) }
+      { path: '', loadChildren: () => import('./pages/pages.routes').then((m) => m.PagesRoutes) }
     ],
   },
   {

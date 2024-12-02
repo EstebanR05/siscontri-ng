@@ -9,8 +9,6 @@ export class AccountAccounting extends IdCodeName {
   acceptMovement?: boolean;
   third?: boolean;
   costCenter?: boolean;
-  accountsReceivable?: boolean;
-  accountsPayable?: boolean;
   accountPrePayment?: boolean;
   accountPrePaymentProvider?: boolean;
   contrary?: boolean;

@@ -4,6 +4,6 @@ export class IdCodeName {
   name?: string;
   code?: string;
   custome?: string;
-  accountsPayable?: any;
-  accountsReceivable?: any;
+  accountsPayable?: boolean;
+  accountsReceivable?: boolean;
 }
